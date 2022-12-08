@@ -69,7 +69,7 @@ const PROXY_CONFIG = [
 ];
 
 module.exports = PROXY_CONFIG;
-```
+'''
 		O context sendo /api ele vai ajudar nós a diferenciarmos quando é uma chamada do roteamento do Angular para nossa API do Spring, então esse context: ['/api'] ajuda nisso, então sempre que fizermos /api no Angular o Angular irá automaticamente irá redirecionar para o target.
 		A segurança está falsa, pois não estamos usando SSL local, na produção a gente habilita isso.
 		Como é uma constante vamos exportar essa config com module.exports = PROXY_CONFIG;.
