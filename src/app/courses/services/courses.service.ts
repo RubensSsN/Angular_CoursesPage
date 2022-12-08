@@ -8,15 +8,15 @@ import { delay, first, tap } from 'rxjs';
 })
 export class CoursesService {
 
-  private readonly API = './assets/courses.json';
+  private readonly API = 'api/courses';
 
   constructor(private httpClient: HttpClient) { }
 
   list() {
     return this.httpClient.get<Course[]>(this.API)
     .pipe(
-      first(),
-      delay(5000),
+      first(), //Faz com que pegamos o primeiro pacote de informações e desligamos a conexão.
+      //delay(5000), // Faz o delay da lista carregar ser de 5 segundos.
       tap(courses => console.log(courses))
     );
     }
