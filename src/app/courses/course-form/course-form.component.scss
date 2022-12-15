@@ -1,0 +1,14 @@
+.full-width {
+    width: 100%;
+}
+
+mat-card {
+    max-width: 80%;
+    margin: 2em auto; // O em serve para falar quantas vezes queremos usar o padrão, ou seja essa margin tem 2* o tamanho padrão.
+    text-align: center;
+}
+
+.min-width {
+    width: 100%;
+    min-width: 150px;
+}
