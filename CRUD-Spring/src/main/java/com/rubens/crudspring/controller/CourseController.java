@@ -2,9 +2,9 @@ package com.rubens.crudspring.controller;
 
 import com.rubens.crudspring.model.Course;
 import com.rubens.crudspring.repository.CoursesRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -21,6 +21,12 @@ public class CourseController {
   @GetMapping //Informa que o método usado será o GET // MESMA COISA DE = @RequestMapping(method = RequestMethod.GET) \\
   public List<Course> list() {
     return coursesRepository.findAll();
+  }
+
+  @PostMapping
+  @Transactional
+  public Course salvar(@RequestBody Course curso) {
+    return coursesRepository.save(curso);
   }
 
 }
