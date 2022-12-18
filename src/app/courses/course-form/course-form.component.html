@@ -4,7 +4,7 @@
         <span>Create course</span>
     </mat-toolbar>
   <mat-card-content>
-    <form [formGroup]="form"><!-- Fazendo o databind da tag do forme com a váriavel 'form' que está no nosso component.ts, com isso os campos dentro da tag form vão fazer referência aos campos que temos dentro do grupo de formulários no TS -->
+    <form [formGroup]="form" class="min-width"><!-- Fazendo o databind da tag do forme com a váriavel 'form' que está no nosso component.ts, com isso os campos dentro da tag form vão fazer referência aos campos que temos dentro do grupo de formulários no TS -->
         <mat-form-field class="full-width">
             <input matInput placeholder="Nome" formControlName="name"> <!-- Usamos o formControlName para referênciar ao campo name no nosso formulário-->
         </mat-form-field>
