@@ -25,6 +25,13 @@ public class CourseController {
     return coursesRepository.findAll();
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<Course> buscaId(@PathVariable Long id) {
+    return coursesRepository.findById(id)
+      .map(record -> ResponseEntity.ok().body(record)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
+      .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+  }
+
   @PostMapping
   public ResponseEntity<Course> salvar(@RequestBody Course curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
     return ResponseEntity.status(HttpStatus.CREATED)
