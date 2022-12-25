@@ -3,8 +3,9 @@
 
   <div class="mat-elevation-z8">
 
-    <app-courses-list class="column-flex" *ngIf="courses$ | async as courses; else loading" [courses]="courses" (add)="onAdd()"></app-courses-list> <!-- Está verificando se há algo no courses$ se tiver carrega os dados de courses$ para o courses e fazemos um data-bind do courses de courses-list dando o valor de courses do courses normal (daqui). E com esse selector (app-courses-list) que carregamos o component de courses-list aqui nesse outro component (courses).
-    (add) está pegando um emissor de eventos do courses-list e dando o valor de onAdd() para ser feito este evento que está no courses component principal (inteligente). -->
+    <app-courses-list class="column-flex" *ngIf="courses$ | async as courses; else loading" [courses]="courses" (add)="onAdd()" (edit)="onEdit($event)"></app-courses-list> <!-- Está verificando se há algo no courses$ se tiver carrega os dados de courses$ para o courses e fazemos um data-bind do courses de courses-list dando o valor de courses do courses normal (daqui). E com esse selector (app-courses-list) que carregamos o component de courses-list aqui nesse outro component (courses).
+    (add) está pegando um emissor de eventos do courses-list e dando o valor de onAdd() para ser feito este evento que está no courses component principal (inteligente).
+    Com o edit quando é ativado ele renderiza o método de onEdit passando o evento que ocorreu para nesse evento pegar o id do course. -->
 
     <ng-template #loading>
       <div class="loading-spinner">

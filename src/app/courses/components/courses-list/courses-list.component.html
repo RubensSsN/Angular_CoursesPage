@@ -23,7 +23,7 @@
 
     <mat-cell *matCellDef="let course" class="action-column">
       <button mat-icon-button color="primary" aria-label="Editar curso">
-        <mat-icon>edit</mat-icon>
+        <mat-icon (click)="onEdit(course)">edit</mat-icon> <!--Criamos aqui então o método onEdit() que está dentro de click que assim irá fazer com que com o click neste ícone, irá redirecionar para o end-point de courses/edit/*id_course*-->
       </button>
 
       <button mat-icon-button color="warn" aria-label="Remover curso">

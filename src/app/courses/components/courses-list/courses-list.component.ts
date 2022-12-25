@@ -1,6 +1,6 @@
-import { Course } from '../../model/course';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+
+import { Course } from '../../model/course';
 
 @Component({
   selector: 'app-courses-list',
@@ -11,6 +11,7 @@ export class CoursesListComponent implements OnInit {
 
   @Input() courses: Course[] = []; // Permite pegarmos os dados do component de courses por causa do @Input().
   @Output() add = new EventEmitter(false); // Permite passarmos algo para fora do nosso component.
+  @Output() edit = new EventEmitter(false); // Permite passarmos algo para fora do nosso component.
 
   readonly displayedColumns = ['name', 'category', 'actions'];
 
@@ -21,6 +22,10 @@ export class CoursesListComponent implements OnInit {
 
   onAdd() {
     this.add.emit(true); // Ao acionado emite um evento true.
+  }
+
+  onEdit(course: Course) {
+    this.edit.emit(course); // Ao acionado emite um evento com o course que o acionou.
   }
 
 }

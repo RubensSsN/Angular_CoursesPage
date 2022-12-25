@@ -44,4 +44,7 @@ export class CoursesComponent implements OnInit {
   onAdd() {
     this.router.navigate(['new'], { relativeTo: this.route}) //Faz com que ao ser acionado o método onAdd() leve para a rota atual + /new por causa do relativeTo que faz com que seja relativo a rota atual (ativa) por ter um valor de this.route, gerando assim uma melhor organização do nosso código, pois se mudarmos a rota não afetará o código inteiro e ficará mais fácil de se arrumar.
   }
+  onEdit(course: Course) {
+    this.router.navigate(['edit', course._id], { relativeTo: this.route}) //Quando o método onEdit() é chamado ele pega o course que foi passado redireciona para o end-point de edit e pega o id do course que acionou o método para adicionar também no end-point e ser possivel a edição daquele course.
+  }
 }
