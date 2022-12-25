@@ -21,6 +21,10 @@ export class CoursesService {
     );
     }
 
+  loadById(id: string) {
+    return this.httpClient.get<Course>(`${this.API}/${id}`); //Carrega o id que está chegando para ele e retorna o course com aquele id.
+  }
+
   save(record: Partial<Course>) {
     return this.httpClient.post<Course>(this.API, record).pipe(first()); //Está salvando o dado via post para a API e esse dado é um course que retorna um observable do tipo Course e faz um pipe firts() para enviar o dado e encerrar a conexão, fazemos isso no Service pois é ele quem cuida da lógica de négocios e transações exteriores.
   }
