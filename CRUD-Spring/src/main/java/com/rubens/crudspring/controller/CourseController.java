@@ -28,7 +28,7 @@ public class CourseController {
   @GetMapping("/{id}")
   public ResponseEntity<Course> buscaId(@PathVariable Long id) {
     return coursesRepository.findById(id)
-      .map(record -> ResponseEntity.ok().body(record)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
+      .map(recordFound -> ResponseEntity.ok().body(recordFound)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
       .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
   }
 
@@ -45,4 +45,15 @@ public class CourseController {
     return coursesRepository.save(curso);
   }*/
 
+  @PutMapping("/{id}")
+  public ResponseEntity<Course> update(@PathVariable Long id, @RequestBody Course curso) {
+    return coursesRepository.findById(id) // Está verificando se o curso existe buscando por id.
+      .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
+        recordFound.setName(curso.getName());
+        recordFound.setCategory(curso.getCategory());
+        Course updated = coursesRepository.save(recordFound); // Variável criada para conter um objeto do tipo Course que irá salvar a informação do curso atualizado.
+        return ResponseEntity.ok().body(updated);  //Retorna para o código ok e no corpo o curso já atualizado.
+      })
+      .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+  }
 }
