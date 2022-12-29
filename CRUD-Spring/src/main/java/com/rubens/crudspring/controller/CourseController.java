@@ -2,13 +2,12 @@ package com.rubens.crudspring.controller;
 
 import com.rubens.crudspring.model.Course;
 import com.rubens.crudspring.repository.CoursesRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/courses") // Essa classe então fica com o end-point acima e tudo nela será renderizado quando o end-point for acessado.
@@ -56,4 +55,15 @@ public class CourseController {
       })
       .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
   }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    return coursesRepository.findById(id)// Está verificando se o curso existe buscando por id.
+      .map(recordFound -> { // Se o curso existir ele pega o curso faz o map e exclui o curso que tem o id passado na url.
+        coursesRepository.deleteById(recordFound.getId());
+        return ResponseEntity.noContent().<Void>build(); // Retorna o noContent() que é o nada no corpo da requisição.
+      })
+      .orElse(ResponseEntity.notFound().build());  // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+  }
+
 }
