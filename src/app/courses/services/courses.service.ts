@@ -35,13 +35,14 @@ export class CoursesService {
     return this.httpClient.post<Course>(this.API, record).pipe(first()); //Está salvando o dado via POST para a API e esse dado é um course que retorna um observable do tipo Course e faz um pipe firts() para enviar o dado e encerrar a conexão, fazemos isso no Service pois é ele quem cuida da lógica de négocios e transações exteriores.
   }
 
+  //Metodo que ao ser acionado da um PUT (atualiza) o curso que foi passado para ele no parâmetro no caso chamamos de record, e fecha a conexão depois de enviar o primeiro dado e encerra a conexão com o back-end.
   private update(record: Partial<Course>) {
-    //Metodo que ao ser acionado da um PUT (atualiza) o curso que foi passado para ele no parâmetro no caso chamamos de record.e fecha a conexão depois de enviar o primeiro dado e encerra a conexão com o back-end.
     return this.httpClient
       .put<Course>(`${this.API}/${record._id}`, record)
       .pipe(first());
   }
 
+  //Metodo que ao ser acionado da um DELETE (deleta) o curso que foi passado para ele no parâmetro no caso chamamos de record, e fecha a conexão depois de enviar o primeiro dado e encerra a conexão com o back-end.
   delete(id: string) {
     return this.httpClient.delete(`${this.API}/${id}`).pipe(first());
   }

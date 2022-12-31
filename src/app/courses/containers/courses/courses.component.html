@@ -5,7 +5,8 @@
 
     <app-courses-list class="column-flex" *ngIf="courses$ | async as courses; else loading" [courses]="courses" (add)="onAdd()" (edit)="onEdit($event)" (remove)="onRemove($event)"></app-courses-list> <!-- Está verificando se há algo no courses$ se tiver carrega os dados de courses$ para o courses e fazemos um data-bind do courses de courses-list dando o valor de courses do courses normal (daqui). E com esse selector (app-courses-list) que carregamos o component de courses-list aqui nesse outro component (courses).
     (add) está pegando um emissor de eventos do courses-list e dando o valor de onAdd() para ser feito este evento que está no courses component principal (inteligente).
-    Com o edit quando é ativado ele renderiza o método de onEdit passando e para podermos capturar o valor que está sendo passado no onEdit de Courses-list.component no caso o course utilizamos o própio objeto de eventos do TypeScript que é o $event -->
+    Com o edit quando é ativado ele renderiza o método de onEdit para podermos capturar o valor que está sendo passado no onEdit de Courses-list.component no caso o course utilizamos o própio objeto de eventos do TypeScript que é o $event
+    Com o Remove quando é ativado ele renderiza o método de onRemove para podermos capturar o valor que está sendo passado no onRemove de Courses-list.component no caso o course utilizamos o própio objeto de eventos do TypeScript que é o $event -->
 
     <ng-template #loading>
       <div class="loading-spinner">

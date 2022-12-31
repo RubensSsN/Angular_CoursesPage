@@ -28,6 +28,6 @@ export class CoursesListComponent implements OnInit {
   }
 
   onDelete(course: Course) {
-    this.remove.emit(course);
+    this.remove.emit(course); // Ao acionado emite um evento com o course que o acionou.
   }
 }
