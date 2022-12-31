@@ -14,7 +14,7 @@ import { CoursesService } from '../../services/courses.service';
   styleUrls: ['./courses.component.scss'],
 })
 export class CoursesComponent implements OnInit {
-  courses$: Observable<Course[]>;
+  courses$: Observable<Course[]> | null = null;
 
   constructor(
     private coursesService: CoursesService,
@@ -23,12 +23,7 @@ export class CoursesComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute //Pega a rota ativa atualmente quando chamado.
   ) {
-    this.courses$ = this.coursesService.list().pipe(
-      catchError((error) => {
-        this.onError('Erro ao carregar cursos'); //Chama o método onError() passando o parâmetro 'Erro ao carregar cursos'.
-        return of([]);
-      })
-    );
+    this.refresh();
   }
 
   onError(errorMsg: string) {
@@ -55,14 +50,20 @@ export class CoursesComponent implements OnInit {
     this.router.navigate(['edit', course._id], { relativeTo: this.route }); //Quando o método onEdit() é chamado ele pega o course que foi passado redireciona para o end-point de edit e pega o id do course que acionou o método para adicionar também no end-point e ser possivel a edição daquele course.
   }
 
-  onDelete(course: Course) {
-    this.coursesService.remove(course._id).subscribe(() => {
-      this.refresh();
-      this.snackBar.open('Curso excluído com sucesso', 'X', {
-        duration: 2000,
-        verticalPosition: 'top',
-        horizontalPosition: 'center',
-      });
-    });
+  onRemove(course: Course) {
+    // Está solicitando uma chamada do método remove() do coursesService, porém precisamos de dar subscribe() para que a chamada seja realmente executada.
+    this.coursesService.delete(course._id).subscribe(
+      () => {
+        this.refresh();
+        // Caixinha informando que o curso foi criado com sucesso.
+        this.snackBar.open('Curso excluído com sucesso', 'X', {
+          duration: 2000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center',
+        });
+      },
+      // Tratando se houver erro (não encontrar registro).
+      (error) => this.onError('Erro ao deletar curso')
+    );
   }
 }
