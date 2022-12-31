@@ -8,7 +8,6 @@ import { delay, first, tap } from 'rxjs';
 })
 export class CoursesService {
   private readonly API = 'api/courses';
-  remove: any;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -43,7 +42,7 @@ export class CoursesService {
       .pipe(first());
   }
 
-  private delete(id: string) {
+  delete(id: string) {
     return this.httpClient.delete(`${this.API}/${id}`).pipe(first());
   }
 }
