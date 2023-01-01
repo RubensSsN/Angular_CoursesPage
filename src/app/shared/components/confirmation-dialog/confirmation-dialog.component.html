@@ -1,0 +1,7 @@
+<div mat-dialog-content>
+  <p>{{ data }}</p>  <!-- Fazendo um databind de data que é nossa váriavel que está sendo pega do onRemove() do courses.component -->
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button (click)="onConfirm(true)" color="primary">Sim</button> <!-- Aciona o método onConfirm() passando o true como parâmetro para termos o result de true -->
+  <button mat-raised-button (click)="onConfirm(false)" color="warn">Não</button> <!-- Aciona o método onConfirm() passando o false como parâmetro para termos o result de false -->
+</div>
