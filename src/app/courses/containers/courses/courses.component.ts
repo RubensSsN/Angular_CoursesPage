@@ -7,6 +7,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { Course } from '../../model/course';
 import { CoursesService } from '../../services/courses.service';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-courses',
@@ -51,19 +52,29 @@ export class CoursesComponent implements OnInit {
   }
 
   onRemove(course: Course) {
-    // Está solicitando uma chamada do método remove() do coursesService, porém precisamos de dar subscribe() para que a chamada seja realmente executada.
-    this.coursesService.delete(course._id).subscribe(
-      () => {
-        this.refresh();
-        // Caixinha informando que o curso foi criado com sucesso.
-        this.snackBar.open('Curso excluído com sucesso', 'X', {
-          duration: 2000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center',
-        });
-      },
-      // Tratando se houver erro (não encontrar registro).
-      (error) => this.onError('Erro ao deletar curso')
-    );
+    // Abre um dialog de confirmação.
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: 'Tem certeza que deseja excluir este curso?',
+    });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      // Após ser fechado (afterClosed()) pega o result do onConfirm() que está no confirm-dialog.component o dialog ele verifica se o result é true (no caso é se o usuário clicar sim para excluir o curso após selecionar um curso para excluir), se for ele executa o código, se não apenas não faz nada.
+      if (result) {
+        // Está solicitando uma chamada do método delete() do coursesService, porém precisamos de dar subscribe() para que a chamada seja realmente executada.
+        this.coursesService.delete(course._id).subscribe(
+          () => {
+            this.refresh();
+            // Caixinha informando que o curso foi criado com sucesso.
+            this.snackBar.open('Curso excluído com sucesso', 'X', {
+              duration: 2000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center',
+            });
+          },
+          // Tratando se houver erro (não encontrar registro).
+          (error) => this.onError('Erro ao deletar curso')
+        );
+      }
+    });
   }
 }
