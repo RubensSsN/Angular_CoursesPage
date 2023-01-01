@@ -63,6 +63,7 @@ export class CoursesComponent implements OnInit {
         // Está solicitando uma chamada do método delete() do coursesService, porém precisamos de dar subscribe() para que a chamada seja realmente executada.
         this.coursesService.delete(course._id).subscribe(
           () => {
+            // Recarrega os dados quando o curso é excluído.
             this.refresh();
             // Caixinha informando que o curso foi criado com sucesso.
             this.snackBar.open('Curso excluído com sucesso', 'X', {
