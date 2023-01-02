@@ -7,7 +7,7 @@
     <form [formGroup]="form" class="min-width"><!-- Fazendo o databind da tag do forme com a váriavel 'form' que está no nosso component.ts, com isso os campos dentro da tag form vão fazer referência aos campos que temos dentro do grupo de formulários no TS -->
         <mat-form-field class="full-width">
             <input matInput placeholder="Nome" formControlName="name" #name />
-            <mat-hint align="end">{{ name.value?.length || 0 }} / 100</mat-hint>  <!-- Indica quantos caracteres foi digitado até o 100. -->
+            <mat-hint align="end">{{ name.value.length || 0 }} / 100</mat-hint>  <!-- Indica quantos caracteres foi digitado até o 100. -->
             <mat-error *ngIf="form.get('name')?.invalid">{{getErrorMessage("name")}}</mat-error> <!-- Pega  a mensagem de erro que foi dada pelo método getErrorMessage() da área de name.-->
         </mat-form-field>
 
