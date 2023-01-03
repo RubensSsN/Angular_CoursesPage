@@ -2,13 +2,18 @@ package com.rubens.crudspring.controller;
 
 import com.rubens.crudspring.model.Course;
 import com.rubens.crudspring.repository.CoursesRepository;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@Validated
 @RestController
 @RequestMapping("/api/courses") // Essa classe então fica com o end-point acima e tudo nela será renderizado quando o end-point for acessado.
 public class CourseController {
@@ -25,14 +30,14 @@ public class CourseController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Course> buscaId(@PathVariable Long id) {
+  public ResponseEntity<Course> buscaId(@PathVariable @NotNull @Positive Long id) {
     return coursesRepository.findById(id)
       .map(recordFound -> ResponseEntity.ok().body(recordFound)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
       .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
   }
 
   @PostMapping
-  public ResponseEntity<Course> salvar(@RequestBody Course curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
+  public ResponseEntity<Course> salvar(@RequestBody @Valid Course curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(coursesRepository.save(curso));
   }
@@ -45,7 +50,7 @@ public class CourseController {
   }*/
 
   @PutMapping("/{id}")
-  public ResponseEntity<Course> update(@PathVariable Long id, @RequestBody Course curso) {
+  public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course curso) {
     return coursesRepository.findById(id) // Está verificando se o curso existe buscando por id.
       .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
         recordFound.setName(curso.getName());
@@ -57,7 +62,7 @@ public class CourseController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable Long id) {
+  public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive  Long id) {
     return coursesRepository.findById(id)// Está verificando se o curso existe buscando por id.
       .map(recordFound -> { // Se o curso existir ele pega o curso faz o map e exclui o curso que tem o id passado na url.
         coursesRepository.deleteById(recordFound.getId());
