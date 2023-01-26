@@ -28,6 +28,8 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+.sonar-project.properties
+
 # Miscellaneous
 /.angular/cache
 .sass-cache/
