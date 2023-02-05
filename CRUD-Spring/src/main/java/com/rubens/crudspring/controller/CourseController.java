@@ -2,6 +2,7 @@ package com.rubens.crudspring.controller;
 
 import com.rubens.crudspring.model.Course;
 import com.rubens.crudspring.repository.CoursesRepository;
+import com.rubens.crudspring.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -17,28 +18,30 @@ import java.util.List;
 @RequestMapping("/api/courses") // Essa classe então fica com o end-point acima e tudo nela será renderizado quando o end-point for acessado.
 public class CourseController {
 
-  private final CoursesRepository coursesRepository;
 
-  public CourseController(CoursesRepository coursesRepository) {
-    this.coursesRepository = coursesRepository;
+  private final CourseService courseService;
+
+  public CourseController(CourseService courseService) {
+    this.courseService = courseService;
   }
 
   @GetMapping //Informa que o método usado será o GET // MESMA COISA DE = @RequestMapping(method = RequestMethod.GET) \\
   public List<Course> list() {
-    return coursesRepository.findAll();
+    return courseService.list();
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<Course> buscaId(@PathVariable @NotNull @Positive Long id) {
-    return coursesRepository.findById(id)
+    return courseService.buscaId(id)
       .map(recordFound -> ResponseEntity.ok().body(recordFound)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
       .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
   }
 
   @PostMapping
+  @ResponseStatus(code = HttpStatus.CREATED)
   public ResponseEntity<Course> salvar(@RequestBody @Valid Course curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
     return ResponseEntity.status(HttpStatus.CREATED)
-      .body(coursesRepository.save(curso));
+      .body(courseService.salvar(curso));
   }
 
   //Uma maneira de fazermos resumidamente o ResponseEntity, porém a diferença é que não poderemos alterar nem manusear os dados da reposta.
@@ -50,24 +53,17 @@ public class CourseController {
 
   @PutMapping("/{id}")
   public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course curso) {
-    return coursesRepository.findById(id) // Está verificando se o curso existe buscando por id.
-      .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
-        recordFound.setName(curso.getName());
-        recordFound.setCategory(curso.getCategory());
-        Course updated = coursesRepository.save(recordFound); // Variável criada para conter um objeto do tipo Course que irá salvar a informação do curso atualizado.
-        return ResponseEntity.ok().body(updated);  //Retorna para o código ok e no corpo o curso já atualizado.
-      })
+    return courseService.update(id, curso) // Está verificando se o curso existe buscando por id.
+      .map(recordFound -> ResponseEntity.ok().body(recordFound)) // Se encontrado o valor ele irá passar para o corpo do site o valor e um http status 200 (ok).
       .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive  Long id) {
-    return coursesRepository.findById(id)// Está verificando se o curso existe buscando por id.
-      .map(recordFound -> { // Se o curso existir ele pega o curso faz o map e exclui o curso que tem o id passado na url.
-        coursesRepository.deleteById(recordFound.getId());
-        return ResponseEntity.noContent().<Void>build(); // Retorna o noContent() que é o nada no corpo da requisição.
-      })
-      .orElse(ResponseEntity.notFound().build());  // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+    if (courseService.delete(id)) {
+      return ResponseEntity.noContent().<Void>build();
+    }
+    return ResponseEntity.notFound().build();
   }
 
 }
