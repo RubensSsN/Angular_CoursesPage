@@ -31,10 +31,8 @@ public class CourseController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Course> buscaId(@PathVariable @NotNull @Positive Long id) {
-    return courseService.buscaId(id)
-      .map(recordFound -> ResponseEntity.ok().body(recordFound)) //Se nosso optional trouxer uma informaÇão do banco de dados iremos retornar isso no corpo da requisição conforme pedido.
-      .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+  public Course buscaId(@PathVariable @NotNull @Positive Long id) {
+    return courseService.buscaId(id);
   }
 
   @PostMapping
@@ -52,18 +50,13 @@ public class CourseController {
   }*/
 
   @PutMapping("/{id}")
-  public ResponseEntity<Course> update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course curso) {
-    return courseService.update(id, curso) // Está verificando se o curso existe buscando por id.
-      .map(recordFound -> ResponseEntity.ok().body(recordFound)) // Se encontrado o valor ele irá passar para o corpo do site o valor e um http status 200 (ok).
-      .orElse(ResponseEntity.notFound().build()); // Se não encontrar iremos fazer o retorno de 404 dizendo que não foi encontrado o registro.
+  public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course curso) {
+    return courseService.update(id, curso); // Está verificando se o curso existe buscando por id.
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive  Long id) {
-    if (courseService.delete(id)) {
-      return ResponseEntity.noContent().<Void>build();
-    }
-    return ResponseEntity.notFound().build();
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void delete(@PathVariable @NotNull @Positive  Long id) {
+    courseService.delete(id);
   }
-
 }
