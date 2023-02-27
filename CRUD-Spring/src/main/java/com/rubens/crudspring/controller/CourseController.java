@@ -1,7 +1,6 @@
 package com.rubens.crudspring.controller;
 
-import com.rubens.crudspring.model.Course;
-import com.rubens.crudspring.repository.CoursesRepository;
+import com.rubens.crudspring.DTO.CourseDTO;
 import com.rubens.crudspring.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -26,18 +25,18 @@ public class CourseController {
   }
 
   @GetMapping //Informa que o método usado será o GET // MESMA COISA DE = @RequestMapping(method = RequestMethod.GET) \\
-  public List<Course> list() {
+  public List<CourseDTO> list() {
     return courseService.list();
   }
 
   @GetMapping("/{id}")
-  public Course buscaId(@PathVariable @NotNull @Positive Long id) {
+  public CourseDTO buscaId(@PathVariable @NotNull @Positive Long id) {
     return courseService.buscaId(id);
   }
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
-  public ResponseEntity<Course> salvar(@RequestBody @Valid Course curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
+  public ResponseEntity<CourseDTO> salvar(@RequestBody @Valid CourseDTO curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
     return ResponseEntity.status(HttpStatus.CREATED)
       .body(courseService.salvar(curso));
   }
@@ -50,7 +49,7 @@ public class CourseController {
   }*/
 
   @PutMapping("/{id}")
-  public Course update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Course curso) {
+  public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO curso) {
     return courseService.update(id, curso); // Está verificando se o curso existe buscando por id.
   }
 
