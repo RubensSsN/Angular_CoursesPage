@@ -1,6 +1,7 @@
 package com.rubens.crudspring.DTO.mapper;
 
 import com.rubens.crudspring.DTO.CourseDTO;
+import com.rubens.crudspring.enums.Category;
 import com.rubens.crudspring.model.Course;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ public class CourseMapper {
     if (course == null) {
       return null;
     }
-    return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+    return new CourseDTO(course.getId(), course.getName(), "Front-end");
   }
 
   public Course toEntity(CourseDTO courseDTO) { // Método que transforma um CourseDTO em uma entidade Course.
@@ -25,7 +26,8 @@ public class CourseMapper {
     }
 
     course.setName(courseDTO.name());
-    course.setCategory(courseDTO.category());
+    course.setCategory(Category.FRONTEND);
+    course.setStatus("Ativo");
 
     return course;
   }
