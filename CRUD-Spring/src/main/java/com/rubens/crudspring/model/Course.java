@@ -31,7 +31,7 @@ public class Course {
 
   @NotNull
   @Column(length = 10, nullable = false)
-  @Convert(converter = CategoryConverter.class)
+  @Convert(converter = CategoryConverter.class)  // Informa qual é o conversor desse campo Category.
   private Category category;
 
   @NotNull
