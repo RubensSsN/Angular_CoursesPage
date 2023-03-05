@@ -46,7 +46,7 @@ public class CourseService {
     return coursesRepository.findById(id) // Está verificando se o curso existe buscando por id.
       .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
         recordFound.setName(curso.name());
-        recordFound.setCategory(Category.FRONTEND );
+        recordFound.setCategory(Category.BACKEND);
         return courseMapper.toDTO(coursesRepository.save(recordFound)); // Está transformando a entidade de Course em uma entidade de CourseDTO e salvando no bano de dados.
       }).orElseThrow(() -> new RecordNotFoundException(id));
   }
