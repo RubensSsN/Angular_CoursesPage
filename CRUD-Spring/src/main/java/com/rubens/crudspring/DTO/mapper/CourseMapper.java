@@ -12,7 +12,7 @@ public class CourseMapper {
     if (course == null) {
       return null;
     }
-    return new CourseDTO(course.getId(), course.getName(), "Front-end");
+    return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
   }
 
   public Course toEntity(CourseDTO courseDTO) { // Método que transforma um CourseDTO em uma entidade Course.
@@ -26,10 +26,20 @@ public class CourseMapper {
     }
 
     course.setName(courseDTO.name());
-    course.setCategory(Category.FRONTEND);
-    course.setStatus("Ativo");
+    course.setCategory(convertCategoryValue(courseDTO.category()));
 
     return course;
+  }
+
+  public Category convertCategoryValue(String value) {  // Método que Converte a String recebida da categoria para o enumerador correto.
+    if (value == null) {
+      return null;
+    }
+    return switch (value) {
+      case "Front-end" -> Category.FRONTEND;
+      case "Back-end" -> Category.BACKEND;
+      default -> throw new IllegalArgumentException("Categoria inválida: " + value);
+    };
   }
 
 }
