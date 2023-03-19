@@ -35,7 +35,7 @@ public class CourseController {
 
   @GetMapping("/{id}")
   public CourseDTO buscaId(@PathVariable @NotNull @Positive Long id) {
-    LOGGER.info("Busca por id: {}", id, "realizada!");
+    LOGGER.info("Busca por id: {}, realizada!", id);
     return courseService.buscaId(id);
   }
 
@@ -56,7 +56,7 @@ public class CourseController {
 
   @PutMapping("/{id}")
   public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO curso) {
-    LOGGER.info("Atualizando curso para: {}", curso, "e id: {}", id);
+    LOGGER.info("Atualizando curso para: {}, e id: {}", curso, id);
     return courseService.update(id, curso); // Está verificando se o curso existe buscando por id.
   }
 
