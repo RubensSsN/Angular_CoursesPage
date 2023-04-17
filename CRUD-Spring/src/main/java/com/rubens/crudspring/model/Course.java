@@ -13,6 +13,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @SQLDelete(sql = "UPDATE Course SET status = 'Inativo' WHERE id = ?") // Aqui podemos passar o comando SQL que o hibernate irá executar toda vez que chamarmos o método DELETE do nosso repository.
@@ -39,5 +42,9 @@ public class Course {
   @Column(length = 10, nullable = false)
   @Convert(converter = StatusConverter.class)
   private Status status = Status.ATIVO;
+
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "course_id")
+  private List<Lesson> lessons = new ArrayList<>();
 
 }
