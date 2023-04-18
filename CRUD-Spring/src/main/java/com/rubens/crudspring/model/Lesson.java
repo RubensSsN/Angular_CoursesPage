@@ -24,4 +24,8 @@ public class Lesson {
   @Column(length = 11, nullable = false)
   private String youtubeUrl;
 
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "course_id", nullable = false)
+  private Course course;
+
 }
