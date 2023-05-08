@@ -41,7 +41,7 @@ public class CrudSpringApplication {
 
         try {
           coursesRepository.save(c);
-          LOGGER.info("[RESPONSE] Curso salvo com sucesso - {}", c);
+          LOGGER.info("[RESPONSE] Curso salvo com sucesso - {}", c.getName());
         } catch (Exception e) {
           LOGGER.error("[ERRO] Salvar curso - {}", e.getMessage());
         }
