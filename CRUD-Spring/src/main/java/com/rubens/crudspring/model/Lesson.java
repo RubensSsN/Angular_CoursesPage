@@ -2,13 +2,7 @@ package com.rubens.crudspring.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @Entity
@@ -26,7 +20,7 @@ public class Lesson {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "course_id", nullable = false)
-  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Estamos apenas lendo a informação do Course.
   private Course course;
 
 }
