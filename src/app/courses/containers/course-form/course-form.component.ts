@@ -16,8 +16,8 @@ export class CourseFormComponent implements OnInit {
   form = this.formBuilder.group({
     _id: [''],
     name: ['', [Validators.required, //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
-        Validators.minLength(3), //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for menor que 3 caracteres.
-        Validators.maxLength(100)], //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for maior que 100 caracteres.
+    Validators.minLength(3), //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for menor que 3 caracteres.
+    Validators.maxLength(100)], //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for maior que 100 caracteres.
     ],
     category: ['', [Validators.required]]  //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
   });
@@ -28,7 +28,7 @@ export class CourseFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private location: Location,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course']; // Obtem a rota e pega um snapshot (imagem da rota em um determinado período de tempo) e acessamos o objeto data que dentro dele temos qualquer coisa que colocarmos dentro do resolver no caso o course que queremos então o especificamos.
@@ -38,6 +38,7 @@ export class CourseFormComponent implements OnInit {
       name: course.name,
       category: course.category,
     });
+    console.log(course);
   }
 
   onSubmit() {

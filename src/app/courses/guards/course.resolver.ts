@@ -20,6 +20,6 @@ export class CourseResolver implements Resolve<Course> {
       return this.service.loadById(route.params['id'])
     }
 
-    return of({_id: '', name: '', category: ''}); // Se não o if acima não for executado retorna um course vazio.
+    return of({ _id: '', name: '', category: '', lessons: [] }); // Se não o if acima não for executado retorna um course vazio.
   }
 }
