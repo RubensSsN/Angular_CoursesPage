@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,14 +14,8 @@ import { Lesson } from '../../model/lesson';
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  form = this.formBuilder.group({
-    _id: [''],
-    name: ['', [Validators.required, //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
-    Validators.minLength(3), //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for menor que 3 caracteres.
-    Validators.maxLength(100)], //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for maior que 100 caracteres.
-    ],
-    category: ['', [Validators.required]]  //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
-  });
+
+  form!: FormGroup; // O sinal de ! está fazendo com que o Angular permita nós inicializarmos a variável form em outro lugar.
 
   constructor(
     private formBuilder: NonNullableFormBuilder,
@@ -33,17 +27,34 @@ export class CourseFormComponent implements OnInit {
 
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course']; // Obtem a rota e pega um snapshot (imagem da rota em um determinado período de tempo) e acessamos o objeto data que dentro dele temos qualquer coisa que colocarmos dentro do resolver no caso o course que queremos então o especificamos.
-    this.form.setValue({
-      // Iniciado o formullário de edição ele já carrega o course em questão por causa do id que está no end-point sendo passado como parâmetro para o resolver.
-      _id: course._id,
-      name: course.name,
-      category: course.category,
+    // Iniciado o formullário de edição ele já carrega o course em questão por causa do id que está no end-point sendo passado como parâmetro para o resolver.
+    this.form = this.formBuilder.group({
+      _id: [course._id],
+      name: [course.name, [Validators.required, //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
+      Validators.minLength(3), //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for menor que 3 caracteres.
+      Validators.maxLength(100)], //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se o tamanho for maior que 100 caracteres.
+      ],
+      category: [course.category, [Validators.required]],  //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
+      lessons: this.formBuilder.array(
+        this.obterLesson(course)
+      )
     });
-    console.log(course);
+  }
+
+  private obterLesson(course: Course) {
+    const lessons = [];
+    if (course?.lessons) {
+      course.lessons.forEach(lesson => {
+        lessons.push(this.criarLesson(lesson));
+      });
+    } else {
+      lessons.push(this.criarLesson());
+    }
+    return lessons;
   }
 
   // Se não for passado nenhum valor do tipo Lesson vai ser setado valores vazios, se for passado valores do tipo Lesson vai ser setado os valores passados.
-  private criarLicao(lesson: Lesson = { id: '', name: '', url: '' }) {
+  private criarLesson(lesson: Lesson = { id: '', name: '', url: '' }) {
     return this.formBuilder.group({
       id: [lesson.id],
       name: [lesson.name],
