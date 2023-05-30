@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../model/course';
+import { Lesson } from '../../model/lesson';
 
 @Component({
   selector: 'app-course-form',
@@ -39,6 +40,15 @@ export class CourseFormComponent implements OnInit {
       category: course.category,
     });
     console.log(course);
+  }
+
+  // Se não for passado nenhum valor do tipo Lesson vai ser setado valores vazios, se for passado valores do tipo Lesson vai ser setado os valores passados.
+  private criarLicao(lesson: Lesson = { id: '', name: '', url: '' }) {
+    return this.formBuilder.group({
+      id: [lesson.id],
+      name: [lesson.name],
+      url: [lesson.url]
+    });
   }
 
   onSubmit() {
