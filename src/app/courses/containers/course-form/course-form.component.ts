@@ -41,6 +41,11 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Este método obtem todas as Lessons de cada curso recebido, ele é chamado na inicialização.
+   * @param course recebe um course e obtem as Lessons dele.
+   * @returns FormGroup com os campos de Lesson.
+   */
   private obterLesson(course: Course) {
     const lessons = [];
     if (course?.lessons) {
