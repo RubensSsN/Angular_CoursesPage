@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, NonNullableFormBuilder, UntypedFormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,6 +8,9 @@ import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
 
+/**
+ * @author Rubens Samuel > @GitHub RubensSsN
+ */
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
@@ -65,6 +68,13 @@ export class CourseFormComponent implements OnInit {
       name: [lesson.name],
       url: [lesson.url]
     });
+  }
+
+  /**
+   * Esse método faz com que seja possível pegarmos os FormArray de Lessons através do Form Control.
+   */
+  getLessonsFormArray() {
+    return (<UntypedFormArray>this.form.get('lessons'))?.controls
   }
 
   onSubmit() {
