@@ -61,6 +61,7 @@ export class CourseFormComponent implements OnInit {
     return lessons;
   }
 
+
   // Se não for passado nenhum valor do tipo Lesson vai ser setado valores vazios, se for passado valores do tipo Lesson vai ser setado os valores passados.
   private criarLesson(lesson: Lesson = { id: '', name: '', url: '' }) {
     return this.formBuilder.group({
@@ -72,9 +73,23 @@ export class CourseFormComponent implements OnInit {
 
   /**
    * Esse método faz com que seja possível pegarmos os FormArray de Lessons através do Form Control.
-   */
+  */
   getLessonsFormArray() {
     return (<UntypedFormArray>this.form.get('lessons'))?.controls
+  }
+
+  adicionarAulas(): void {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.push(this.criarLesson());
+  }
+
+  /**
+   * Método que remove a aula a partir do index da lesson (Aula) em questão.
+   * @param index É o index da lesson que temos naquele formulário, pegamos ele na variável lesson do html.
+   */
+  removerAula(index: number): void {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    lessons.removeAt(index);
   }
 
   onSubmit() {

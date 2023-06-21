@@ -26,11 +26,12 @@
 
       <mat-toolbar>
         <span>Aulas</span>
-        <button mat-icon-button color="accent">
+        <button mat-icon-button color="accent" (click)="adicionarAulas()">
           <mat-icon aria-label="Botão de adicionar uma nova aula">add</mat-icon>
         </button>
       </mat-toolbar>
 
+      <!-- No ngFor cada lesson que temos dentro do método getLessonsFormArray() é pego o index da lesson em questão. -->
       <table style="width: 100%" formArrayName="lessons" *ngFor="let lesson of getLessonsFormArray(); let i = index">
         <tr [formGroupName]="i">
           <td style="width: 65%">
@@ -45,6 +46,11 @@
               <span matPrefix>https://youtu.be/</span>
               <input matInput formControlName="url" />
             </mat-form-field>
+          </td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removerAula(i)">
+              <mat-icon aria-label="Botão de remover a aula">delete</mat-icon>
+            </button>
           </td>
         </tr>
       </table>
