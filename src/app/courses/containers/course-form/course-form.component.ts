@@ -39,7 +39,7 @@ export class CourseFormComponent implements OnInit {
       ],
       category: [course.category, [Validators.required]],  //Com o validadtors o Angular Material faz o css por causa da classe Validators para o erro se não tiver valor.
       lessons: this.formBuilder.array(
-        this.obterLesson(course)
+        this.obterLesson(course), Validators.required
       )
     });
   }
@@ -66,8 +66,8 @@ export class CourseFormComponent implements OnInit {
   private criarLesson(lesson: Lesson = { id: '', name: '', url: '' }) {
     return this.formBuilder.group({
       id: [lesson.id],
-      name: [lesson.name],
-      url: [lesson.url]
+      name: [lesson.name, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      url: [lesson.url, [Validators.required, Validators.minLength(10), Validators.maxLength(11)]]
     });
   }
 
@@ -92,11 +92,16 @@ export class CourseFormComponent implements OnInit {
     lessons.removeAt(index);
   }
 
+  // Está fazendo com que ao se usar este método seja salvo os dados do formulário dando subscribe com seu resultado e também se tiver algum erro exibindo o erro com uma snack bar
   onSubmit() {
-    this.service.save(this.form.value).subscribe(
-      (result) => this.onSuccess(),
-      (error) => this.onError()
-    ); // Está fazendo com que ao se usar este metodo seja salvo os dados do formulário dando subscribe com seu resultado e também se tiver algum erro exibindo o erro com uma snack bar
+    if (this.form.valid) {
+      this.service.save(this.form.value).subscribe(
+        (result) => this.onSuccess(),
+        (error) => this.onError()
+      );
+    } else {
+      alert('form invalido');
+    }
   }
 
   onCancel() {
@@ -131,4 +136,10 @@ export class CourseFormComponent implements OnInit {
 
     return 'Erro ao salvar curso';
   }
+
+  isFormArrayRequired() {
+    const lessons = this.form.get('lessons') as UntypedFormArray;
+    return !lessons.valid && lessons.hasError('required') && lessons.touched;
+  }
+
 }
