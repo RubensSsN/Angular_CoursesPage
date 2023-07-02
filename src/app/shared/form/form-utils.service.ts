@@ -8,6 +8,25 @@ export class FormUtilsService {
 
   constructor() { }
 
+
+  /**
+   * Esse método valida todos os campos do formulário e se tiver algum com algo irregular ele marca-os de vermelho e os deixa selecionado.
+   * @param formGroup - Nome do Formulário.
+   */
+  validateAllFormFields(formGroup: UntypedFormGroup | UntypedFormArray) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+
+      if (control instanceof UntypedFormControl) {
+        control?.markAsTouched({ onlySelf: true });  // Esta opção (onlySelf: true) faz com que se tivermos um FormGroup ou FormArray quando marcamos todos, iremos marcar todos os filhos também como touched e queremos fazer isso um por um, então usamos ela. Outra questão para fazermos isso é que caso temos Observables que estão escutando por mudanças nos campos não colocar isso vai acionar o trigger e pode causar uma bagunça na nossa aplicação.
+      } else if (control instanceof UntypedFormGroup || control instanceof UntypedFormArray) {
+          control?.markAsTouched({ onlySelf: true });
+          this.validateAllFormFields(control); // Chama o método novamente enviando o control, isso acontece até acabar os campos que não estão validados, quando acabar o if de cima da true e encerra o método.
+      }
+      
+    })
+  }
+
   /**
    * @param formGroup - Nome do Formulário.
    * @param fieldName - Nome do campo do Formulário.
@@ -21,7 +40,7 @@ export class FormUtilsService {
 
   /**
    * Este método pega o do campo recebido e trata este erro de uma maneira personalizada.
-   * @param field Nome do campo do formulário.
+   * @param field - Nome do campo do formulário.
    * @returns Retorna uma mensagem de erro.
    */
   getErrorMessageFromField(field: UntypedFormControl) {
