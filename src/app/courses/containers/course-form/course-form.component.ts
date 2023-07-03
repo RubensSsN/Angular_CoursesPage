@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../model/course';
 import { Lesson } from '../../model/lesson';
+import { FormUtilsService } from '../../../shared/form/form-utils.service';
 
 /**
  * @author Rubens Samuel > @GitHub RubensSsN
@@ -25,7 +26,8 @@ export class CourseFormComponent implements OnInit {
     private service: CoursesService,
     private snackBar: MatSnackBar,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public formUtils: FormUtilsService
   ) { }
 
   ngOnInit(): void {
@@ -100,7 +102,7 @@ export class CourseFormComponent implements OnInit {
         (error) => this.onError()
       );
     } else {
-      alert('form invalido');
+      this.formUtils.validateAllFormFields(this.form);
     }
   }
 
@@ -117,29 +119,6 @@ export class CourseFormComponent implements OnInit {
   onError() {
     //Ao se ter um erro ele é acionado se o método usar ele e mostra uma snackbar na tela do usuário.
     this.snackBar.open('Erro ao salvar curso.', '', { duration: 5000 });
-  }
-
-  getErrorMessage(fieldName: string) {
-    const field = this.form.get(fieldName);
-
-    if (field?.hasError('required')) {  // Verifica se tem algum erro no formulário do tipo required.
-      return 'Campo obrigatório';
-    }
-    if (field?.hasError('minlength')) { // Verifica se tem algum erro no formulário do tipo minlength.
-      const requiredLength: number = field.errors ? field.errors['minlength']['requiredLength'] : 5; // Se tiver um erro do tipo minlength ele pega a quantidade de caracteres mínimas necessárias e retorna o número 5 para o requiredLength.
-      return `Tamanho mínimo precisa ser de ${requiredLength} caracteres.`;
-    }
-    if (field?.hasError('maxlength')) {
-      const requiredLength: number = field.errors ? field.errors['maxlength']['requiredLength'] : 100; // Se tiver um erro do tipo maxlength ele pega a quantidade de caracteres máximas necessárias e retorna o número 100 para o requiredLength.
-      return `Tamanho máximo excedido de ${requiredLength} caracteres.`;
-    }
-
-    return 'Erro ao salvar curso';
-  }
-
-  isFormArrayRequired() {
-    const lessons = this.form.get('lessons') as UntypedFormArray;
-    return !lessons.valid && lessons.hasError('required') && lessons.touched;
   }
 
 }
