@@ -10,7 +10,7 @@ public enum Status {
     this.value = value;
   }
 
-  // Serve para nós conseguirmos obter a categoria sem ser um Enum e sim uma String.
+  // Serve para nós conseguirmos obter o Status sem ser um Enum e sim uma String.
   public String getValue() {
     return value;
   }

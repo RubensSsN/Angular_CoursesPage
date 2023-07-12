@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import java.sql.SQLException;
 
 @SpringBootApplication
-public class CrudSpringApplication {
+public class  CrudSpringApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CrudSpringApplication.class);
 
