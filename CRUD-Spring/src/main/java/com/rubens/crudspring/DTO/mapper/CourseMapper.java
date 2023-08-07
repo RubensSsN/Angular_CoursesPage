@@ -37,6 +37,16 @@ public class CourseMapper {
     course.setName(courseDTO.name());
     course.setCategory(convertCategoryValue(courseDTO.category()));
 
+    List<Lesson> lessons = courseDTO.lessons().stream().map(lessonsDTO -> {
+      var lesson = new Lesson();
+      lesson.setId(lessonsDTO.id());
+      lesson.setName(lessonsDTO.name());
+      lesson.setYoutubeUrl(lessonsDTO.url());
+      lesson.setCourse(course);
+      return lesson;
+    }).collect(Collectors.toList());
+    course.setLessons(lessons);
+
     return course;
   }
 

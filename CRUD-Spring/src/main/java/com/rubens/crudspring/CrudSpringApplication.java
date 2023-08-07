@@ -14,38 +14,37 @@ import org.springframework.context.annotation.Bean;
 import java.sql.SQLException;
 
 @SpringBootApplication
-public class  CrudSpringApplication {
+public class CrudSpringApplication {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CrudSpringApplication.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CrudSpringApplication.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(CrudSpringApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(CrudSpringApplication.class, args);
+  }
 
-    @Bean
-    CommandLineRunner initDataBase(CoursesRepository coursesRepository) {
-      return args -> {
-        coursesRepository.deleteAll();
+  @Bean
+  CommandLineRunner initDataBase(CoursesRepository coursesRepository) {
+    return args -> {
+      coursesRepository.deleteAll();
 
-        Course c = new Course();
-        c.setName("Angular com Spring");
-        c.setCategory(Category.FRONTEND);
+      Course c = new Course();
+      c.setName("Angular com Spring");
+      c.setCategory(Category.FRONTEND);
 
+      Lesson l = new Lesson();
+      l.setName("Astronomia");
+      l.setYoutubeUrl("vb2a06a?v=2");
+      l.setCourse(c);
 
-        Lesson l = new Lesson();
-        l.setName("Astronomia");
-        l.setYoutubeUrl("vb2a06a?v=2");
-        l.setCourse(c);
+      c.getLessons().add(l);
 
-        c.getLessons().add(l);
-
-        try {
-          coursesRepository.save(c);
-          LOGGER.info("[RESPONSE] Curso salvo com sucesso - {}", c.getName());
-        } catch (Exception e) {
-          LOGGER.error("[ERRO] Salvar curso - {}", e.getMessage());
-        }
-      };
-    }
+      try {
+        coursesRepository.save(c);
+        LOGGER.info("[RESPONSE] Curso salvo com sucesso - {}", c.getName());
+      } catch (Exception e) {
+        LOGGER.error("[ERRO] Salvar curso - {}", e.getMessage());
+      }
+    };
+  }
 
 }

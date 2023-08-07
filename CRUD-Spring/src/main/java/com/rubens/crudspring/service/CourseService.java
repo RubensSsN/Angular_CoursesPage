@@ -3,6 +3,8 @@ package com.rubens.crudspring.service;
 import com.rubens.crudspring.DTO.CourseDTO;
 import com.rubens.crudspring.DTO.mapper.CourseMapper;
 import com.rubens.crudspring.exception.RecordNotFoundException;
+import com.rubens.crudspring.model.Course;
+import com.rubens.crudspring.model.Lesson;
 import com.rubens.crudspring.repository.CoursesRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,6 +47,10 @@ public class CourseService {
       .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
         recordFound.setName(curso.name());
         recordFound.setCategory(courseMapper.convertCategoryValue(curso.category()));
+        Course c = new Course();
+        c = courseMapper.toEntity(curso);
+        List<Lesson> lessons = c.getLessons();
+        recordFound.setLessons(lessons);
         return courseMapper.toDTO(coursesRepository.save(recordFound)); // Está transformando a entidade de Course em uma entidade de CourseDTO e salvando no bano de dados.
       }).orElseThrow(() -> new RecordNotFoundException(id));
   }
