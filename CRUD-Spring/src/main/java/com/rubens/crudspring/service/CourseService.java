@@ -47,10 +47,9 @@ public class CourseService {
       .map(recordFound -> {  // Se o curso existir ele pega o curso faz o map e seta o nome do curso com o curso atualizado e a categoria também.
         recordFound.setName(curso.name());
         recordFound.setCategory(courseMapper.convertCategoryValue(curso.category()));
-        Course c = new Course();
-        c = courseMapper.toEntity(curso);
-        List<Lesson> lessons = c.getLessons();
-        recordFound.setLessons(lessons);
+        Course c = courseMapper.toEntity(curso);
+        recordFound.getLessons().clear();
+        c.getLessons().forEach(recordFound.getLessons()::add);
         return courseMapper.toDTO(coursesRepository.save(recordFound)); // Está transformando a entidade de Course em uma entidade de CourseDTO e salvando no bano de dados.
       }).orElseThrow(() -> new RecordNotFoundException(id));
   }
