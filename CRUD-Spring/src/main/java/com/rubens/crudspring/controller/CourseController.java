@@ -16,7 +16,8 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/api/courses") // Essa classe então fica com o end-point acima e tudo nela será renderizado quando o end-point for acessado.
+@RequestMapping("/api/courses") // Essa classe então fica com o end-point acima e tudo nela será renderizado
+                                // quando o end-point for acessado.
 public class CourseController {
 
   private static Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
@@ -27,7 +28,8 @@ public class CourseController {
     this.courseService = courseService;
   }
 
-  @GetMapping //Informa que o método usado será o GET // MESMA COISA DE = @RequestMapping(method = RequestMethod.GET) \\
+  @GetMapping // Informa que o método usado será o GET // MESMA COISA DE =
+              // @RequestMapping(method = RequestMethod.GET) \\
   public List<CourseDTO> list() {
     LOGGER.info("Cursos listados com sucesso!");
     return courseService.list();
@@ -41,18 +43,25 @@ public class CourseController {
 
   @PostMapping
   @ResponseStatus(code = HttpStatus.CREATED)
-  public ResponseEntity<CourseDTO> salvar(@RequestBody @Valid CourseDTO curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
+  public ResponseEntity<CourseDTO> salvar(@RequestBody @Valid CourseDTO curso) { // Método para salvar dados no banco de
+                                                                                 // dados do tipo Course e que retornará
+                                                                                 // o HTTP 201 (Created) por conta do
+                                                                                 // ResponseEntity.
     LOGGER.info("Salvando Curso: {}", curso);
     return ResponseEntity.status(HttpStatus.CREATED)
-      .body(courseService.salvar(curso));
+        .body(courseService.salvar(curso));
   }
 
-  //Uma maneira de fazermos resumidamente o ResponseEntity, porém a diferença é que não poderemos alterar nem manusear os dados da reposta.
-  /*@PostMapping
-  @ResponseStatus(code = HttpStatus.CREATED)
-  public Course salvar(@RequestBody Course curso) {
-    return coursesRepository.save(curso);
-  }*/
+  // Uma maneira de fazermos resumidamente o ResponseEntity, porém a diferença é
+  // que não poderemos alterar nem manusear os dados da reposta.
+  /*
+   * @PostMapping
+   *
+   * @ResponseStatus(code = HttpStatus.CREATED)
+   * public Course salvar(@RequestBody Course curso) {
+   * return coursesRepository.save(curso);
+   * }
+   */
 
   @PutMapping("/{id}")
   public CourseDTO update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid @NotNull CourseDTO curso) {
@@ -62,7 +71,7 @@ public class CourseController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable @NotNull @Positive  Long id) {
+  public void delete(@PathVariable @NotNull @Positive Long id) {
     courseService.delete(id);
     LOGGER.info("Deletando curso do id: {}", id);
   }
