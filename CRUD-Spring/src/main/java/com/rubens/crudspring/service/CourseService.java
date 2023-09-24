@@ -1,14 +1,19 @@
 package com.rubens.crudspring.service;
 
 import com.rubens.crudspring.DTO.CourseDTO;
+import com.rubens.crudspring.DTO.CoursePageDTO;
 import com.rubens.crudspring.DTO.mapper.CourseMapper;
 import com.rubens.crudspring.exception.RecordNotFoundException;
 import com.rubens.crudspring.model.Course;
 import com.rubens.crudspring.model.Lesson;
 import com.rubens.crudspring.repository.CoursesRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,15 +33,24 @@ public class CourseService {
     this.courseMapper = courseMapper;
   }
 
-  @GetMapping //Informa que o método usado será o GET // MESMA COISA DE = @RequestMapping(method = RequestMethod.GET) \\
-  public List<CourseDTO> list() {
-    return coursesRepository.findAll().stream().map(courseMapper::toDTO).collect(Collectors.toList()); // Está recebendo os dados do findAll e fazendo um stream com as informações para transformar e uma entidade de DTO e colocar na lista depois todos os dados.
-  }
-
   public CourseDTO buscaId(@NotNull @Positive Long id) {
     return coursesRepository.findById(id).map(courseMapper::toDTO)
       .orElseThrow(() -> new RecordNotFoundException(id));
   }
+
+  public CoursePageDTO list(@PositiveOrZero int pageNumber, @Positive @Max(20) int pageSize) {
+    Page<Course> page = coursesRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    List<CourseDTO> courses = page.get().map(courseMapper::toDTO).collect(Collectors.toList());
+    return new CoursePageDTO(courses, page.getTotalElements(), page.getTotalPages());
+  }
+
+  /*
+  public List<CourseDTO> list() {
+    return coursesRepository.findAll()
+      .stream()
+      .map(courseMapper::toDTO)
+      .collect(Collectors.toList()); // Está recebendo os dados do findAll e fazendo um stream com as informações para transformar e uma entidade de DTO e colocar na lista depois todos os dados.
+  }*/
 
   public CourseDTO salvar(@Valid @NotNull CourseDTO curso) { //Método para salvar dados no banco de dados do tipo Course e que retornará o HTTP 201 (Created) por conta do ResponseEntity.
     return courseMapper.toDTO(coursesRepository.save(courseMapper.toEntity(curso))); // Está transformando a entidade de Course em uma entidade de CourseDTO e salvando no bano de dados com o método transformando o DTO em entidade para salvar no banco de dados.

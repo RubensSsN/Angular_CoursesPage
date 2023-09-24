@@ -1,10 +1,10 @@
 package com.rubens.crudspring.controller;
 
 import com.rubens.crudspring.DTO.CourseDTO;
+import com.rubens.crudspring.DTO.CoursePageDTO;
 import com.rubens.crudspring.service.CourseService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,11 +28,17 @@ public class CourseController {
     this.courseService = courseService;
   }
 
-  @GetMapping // Informa que o método usado será o GET // MESMA COISA DE =
+  /*@GetMapping // Informa que o método usado será o GET // MESMA COISA DE =
               // @RequestMapping(method = RequestMethod.GET) \\
   public List<CourseDTO> list() {
     LOGGER.info("Cursos listados com sucesso!");
     return courseService.list();
+  }*/
+
+  @GetMapping
+  public CoursePageDTO list(@RequestParam(defaultValue = "0") @PositiveOrZero int pageNumber, @RequestParam(defaultValue = "10") @Positive @Max(20) int pageSize) {
+    LOGGER.info("Cursos listados com sucesso!");
+    return courseService.list(pageNumber, pageSize);
   }
 
   @GetMapping("/{id}")
